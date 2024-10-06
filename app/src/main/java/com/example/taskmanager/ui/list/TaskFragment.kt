@@ -18,6 +18,8 @@ import com.example.taskmanager.viewmodel.TaskViewModel
 class TaskFragment : Fragment(), OnTaskClickListener {
 
     private lateinit var taskViewModel: TaskViewModel
+    private lateinit var adapter: TaskAdapter
+    private var isSelectionMode = false // Track if selection mode is active
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +28,7 @@ class TaskFragment : Fragment(), OnTaskClickListener {
         // Inflate the layout for this fragment
         val binding = FragmentTaskBinding.inflate(inflater, container, false)
 
-        val adapter = TaskAdapter(this)
+        adapter = TaskAdapter(this)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -45,6 +47,18 @@ class TaskFragment : Fragment(), OnTaskClickListener {
             navigateToFragment(settingsFragment)
         }
 
+        binding.fabSelectMode.setOnClickListener {
+            toggleSelectionMode()
+        }
+
+        // Handle long press for selection
+        binding.fabDeleteMode.setOnClickListener {
+            if (isSelectionMode) {
+                deleteSelectedTasks()
+                exitSelectionMode()
+            }
+        }
+
         return binding.root
     }
 
@@ -57,15 +71,40 @@ class TaskFragment : Fragment(), OnTaskClickListener {
     }
 
     override fun onTaskClick(task: Task) {
-        // Navigate to the edit fragment and pass the task as a Bundle
-        val editTaskFragment = EditFragment()
-        val bundle = Bundle().apply {
-            putParcelable("task", task)
+        if (isSelectionMode) {
+            // If selection mode is active, don't navigate, just toggle the selection
+            adapter.getSelectedTasks()
+        } else {
+            // Navigate to the edit fragment and pass the task as a Bundle
+            val editTaskFragment = EditFragment()
+            val bundle = Bundle().apply {
+                putParcelable("task", task)
+            }
+            editTaskFragment.arguments = bundle
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, editTaskFragment)
+                .addToBackStack(null)
+                .commit()
         }
-        editTaskFragment.arguments = bundle
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, editTaskFragment)
-            .addToBackStack(null)
-            .commit()
+    }
+
+    // Function to delete selected tasks
+    private fun deleteSelectedTasks() {
+        val selectedTasks = adapter.getSelectedTasks()
+        selectedTasks.forEach { taskViewModel.delete(it) } // Delete selected tasks from the ViewModel
+        adapter.clearSelection()
+    }
+
+    // Function to exit selection mode
+    private fun exitSelectionMode() {
+        isSelectionMode = false
+        adapter.clearSelection()
+        // Optionally hide the delete button or action bar
+    }
+
+    // Function to enter selection mode
+    private fun toggleSelectionMode() {
+        isSelectionMode = !isSelectionMode
+        // Optionally show the delete button or action bar
     }
 }
