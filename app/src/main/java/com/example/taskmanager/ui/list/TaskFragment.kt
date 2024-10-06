@@ -36,17 +36,22 @@ class TaskFragment : Fragment(), OnTaskClickListener {
         }
 
         binding.fabAddTask.setOnClickListener {
-            navigateToAddTaskFragment() // Call the function to navigate to the new fragment
+            val addTaskFragment = AddTaskFragment()
+            navigateToFragment(addTaskFragment) // Call the function to navigate to the new fragment
+        }
+
+        binding.fabDarkMode.setOnClickListener {
+            val settingsFragment = SettingsFragment()
+            navigateToFragment(settingsFragment)
         }
 
         return binding.root
     }
 
     // Function to handle navigation to AddTaskFragment
-    private fun navigateToAddTaskFragment() {
-        val addTaskFragment = AddTaskFragment()
+    private fun navigateToFragment(fragment: Fragment) {
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, addTaskFragment) // Use the correct container ID
+            .replace(R.id.fragment_container, fragment) // Use the correct container ID
             .addToBackStack(null) // Optional: Add to back stack to allow back navigation
             .commit()
     }
