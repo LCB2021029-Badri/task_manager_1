@@ -9,7 +9,10 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.2"
 constraintlayout = "2.1.4"
-#room = "2.6.1"
+room = "2.6.1"
+navigationFragmentKtx = "2.8.2"
+navigationUiKtx = "2.8.2"
+navigationFragment = "2.8.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -21,10 +24,14 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 #-----------------------------------------------------------------------------------------------------------------------------------
-androidx-room-runtime = { module = "androidx.room:room-runtime", version = "2.5.0" }
-androidx-room-compiler = { module = "androidx.room:room-compiler", version = "2.5.0" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" } # Use version ref
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" } # Use version ref
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" } # Added Room KTX
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version = "2.6.0" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version = "2.6.0" }
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
+androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 

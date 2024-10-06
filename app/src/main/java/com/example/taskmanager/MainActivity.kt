@@ -5,6 +5,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
+import com.example.taskmanager.ui.list.TaskFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,5 +19,15 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         // badri's code
+        if (savedInstanceState == null) {
+            loadFragment(TaskFragment())
+        }
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        // Replace the current fragment with the new fragment
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
     }
 }
