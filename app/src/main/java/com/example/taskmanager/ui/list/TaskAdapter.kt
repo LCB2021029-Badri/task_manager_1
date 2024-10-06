@@ -12,7 +12,6 @@ import java.util.*
 
 class TaskAdapter(private val listener: OnTaskClickListener) : ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffCallback()) {
 
-    // List to hold selected tasks
     private val selectedTasks = mutableSetOf<Task>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -38,34 +37,30 @@ class TaskAdapter(private val listener: OnTaskClickListener) : ListAdapter<Task,
                 }
             )
 
-            // handling on item click events
-            binding.root.setOnClickListener {
-                listener.onTaskClick(task)
-            }
-
-            // Highlight the selected item
+            // Highlight selected item
             binding.root.isSelected = selectedTasks.contains(task)
             binding.root.setBackgroundColor(
                 if (selectedTasks.contains(task)) {
-                    binding.root.context.getColor(R.color.selected_item) // Define this color in your colors.xml
+                    binding.root.context.getColor(R.color.selected_item)
                 } else {
                     binding.root.context.getColor(android.R.color.transparent)
                 }
             )
 
-            // Handle normal click events
+            // Handle item click
             binding.root.setOnClickListener {
-                listener.onTaskClick(task)
+                listener.onTaskClick(task) // Will toggle selection if in selection mode
             }
 
-            // Handle long press events for selection
+            // Handle long click to enable selection mode
             binding.root.setOnLongClickListener {
-                toggleSelection(task)
+                listener.onTaskLongClick(task) // Enter selection mode and select item
                 true
             }
         }
     }
 
+    // Toggle selection of a task
     fun toggleSelection(task: Task) {
         if (selectedTasks.contains(task)) {
             selectedTasks.remove(task)
@@ -75,18 +70,18 @@ class TaskAdapter(private val listener: OnTaskClickListener) : ListAdapter<Task,
         notifyItemChanged(currentList.indexOf(task))
     }
 
-    // Return the selected tasks
+    // Return selected tasks
     fun getSelectedTasks(): Set<Task> {
         return selectedTasks
     }
 
-    // Clear the selection
+    // Clear selection
     fun clearSelection() {
         selectedTasks.clear()
         notifyDataSetChanged()
     }
 
-     class TaskDiffCallback : DiffUtil.ItemCallback<Task>() {
+    class TaskDiffCallback : DiffUtil.ItemCallback<Task>() {
         override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
             return oldItem.id == newItem.id
         }
@@ -95,5 +90,4 @@ class TaskAdapter(private val listener: OnTaskClickListener) : ListAdapter<Task,
             return oldItem == newItem
         }
     }
-
 }

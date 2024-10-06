@@ -25,7 +25,6 @@ class TaskFragment : Fragment(), OnTaskClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val binding = FragmentTaskBinding.inflate(inflater, container, false)
 
         adapter = TaskAdapter(this)
@@ -39,7 +38,7 @@ class TaskFragment : Fragment(), OnTaskClickListener {
 
         binding.fabAddTask.setOnClickListener {
             val addTaskFragment = AddTaskFragment()
-            navigateToFragment(addTaskFragment) // Call the function to navigate to the new fragment
+            navigateToFragment(addTaskFragment)
         }
 
         binding.fabDarkMode.setOnClickListener {
@@ -47,11 +46,7 @@ class TaskFragment : Fragment(), OnTaskClickListener {
             navigateToFragment(settingsFragment)
         }
 
-        binding.fabSelectMode.setOnClickListener {
-            toggleSelectionMode()
-        }
-
-        // Handle long press for selection
+        // Handle delete in selection mode
         binding.fabDeleteMode.setOnClickListener {
             if (isSelectionMode) {
                 deleteSelectedTasks()
@@ -65,18 +60,18 @@ class TaskFragment : Fragment(), OnTaskClickListener {
     // Function to handle navigation to AddTaskFragment
     private fun navigateToFragment(fragment: Fragment) {
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment) // Use the correct container ID
-            .addToBackStack(null) // Optional: Add to back stack to allow back navigation
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
             .commit()
     }
 
     override fun onTaskClick(task: Task) {
         if (isSelectionMode) {
-            // If selection mode is active, don't navigate, just toggle the selection
+            // Toggle selection when in selection mode
             adapter.toggleSelection(task)
-//            adapter.getSelectedTasks()
+            checkIfSelectionModeActive() // Exit selection mode if no items are selected
         } else {
-            // Navigate to the edit fragment and pass the task as a Bundle
+            // Navigate to edit fragment when not in selection mode
             val editTaskFragment = EditFragment()
             val bundle = Bundle().apply {
                 putParcelable("task", task)
@@ -89,23 +84,33 @@ class TaskFragment : Fragment(), OnTaskClickListener {
         }
     }
 
-    // Function to delete selected tasks
+    override fun onTaskLongClick(task: Task) {
+        if (!isSelectionMode) {
+            enterSelectionMode() // Enter selection mode on long-click
+        }
+        adapter.toggleSelection(task)
+    }
+
     private fun deleteSelectedTasks() {
         val selectedTasks = adapter.getSelectedTasks()
-        selectedTasks.forEach { taskViewModel.delete(it) } // Delete selected tasks from the ViewModel
+        selectedTasks.forEach { taskViewModel.delete(it) }
         adapter.clearSelection()
     }
 
-    // Function to exit selection mode
+    private fun enterSelectionMode() {
+        isSelectionMode = true
+        // Show delete button or perform any UI update for selection mode
+    }
+
     private fun exitSelectionMode() {
         isSelectionMode = false
         adapter.clearSelection()
-        // Optionally hide the delete button or action bar
+        // Hide delete button or reset any selection UI
     }
 
-    // Function to enter selection mode
-    private fun toggleSelectionMode() {
-        isSelectionMode = !isSelectionMode
-        // Optionally show the delete button or action bar
+    private fun checkIfSelectionModeActive() {
+        if (adapter.getSelectedTasks().isEmpty()) {
+            exitSelectionMode() // Exit selection mode if no items are selected
+        }
     }
 }
