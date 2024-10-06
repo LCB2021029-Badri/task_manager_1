@@ -10,10 +10,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.taskmanager.R
+import com.example.taskmanager.data.models.Task
 import com.example.taskmanager.databinding.FragmentTaskBinding
+import com.example.taskmanager.interfaces.OnTaskClickListener
 import com.example.taskmanager.viewmodel.TaskViewModel
 
-class TaskFragment : Fragment() {
+class TaskFragment : Fragment(), OnTaskClickListener {
 
     private lateinit var taskViewModel: TaskViewModel
 
@@ -24,7 +26,7 @@ class TaskFragment : Fragment() {
         // Inflate the layout for this fragment
         val binding = FragmentTaskBinding.inflate(inflater, container, false)
 
-        val adapter = TaskAdapter()
+        val adapter = TaskAdapter(this)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -46,6 +48,19 @@ class TaskFragment : Fragment() {
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, addTaskFragment) // Use the correct container ID
             .addToBackStack(null) // Optional: Add to back stack to allow back navigation
+            .commit()
+    }
+
+    override fun onTaskClick(task: Task) {
+        // Navigate to the edit fragment and pass the task as a Bundle
+        val editTaskFragment = EditFragment()
+        val bundle = Bundle().apply {
+            putParcelable("task", task)
+        }
+        editTaskFragment.arguments = bundle
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, editTaskFragment)
+            .addToBackStack(null)
             .commit()
     }
 }

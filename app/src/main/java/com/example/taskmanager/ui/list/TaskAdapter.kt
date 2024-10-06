@@ -6,10 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.taskmanager.R
 import com.example.taskmanager.data.models.Task
 import com.example.taskmanager.databinding.TaskItemBinding
+import com.example.taskmanager.interfaces.OnTaskClickListener
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TaskAdapter : ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffCallback()) {
+class TaskAdapter(private val listener: OnTaskClickListener) : ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val binding = TaskItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,7 +22,7 @@ class TaskAdapter : ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffCallba
         holder.bind(task)
     }
 
-    class TaskViewHolder(private val binding: TaskItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class TaskViewHolder(private val binding: TaskItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
             binding.textViewTitle.text = task.title
             binding.textViewDescription.text = task.description
@@ -33,6 +34,11 @@ class TaskAdapter : ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffCallba
                     else -> R.color.priority_low
                 }
             )
+
+            // handling on item click events
+            binding.root.setOnClickListener {
+                listener.onTaskClick(task)
+            }
         }
     }
 
