@@ -64,16 +64,15 @@ class TaskAdapter(private val listener: OnTaskClickListener) : ListAdapter<Task,
                 true
             }
         }
+    }
 
-        private fun toggleSelection(task: Task) {
-            if (selectedTasks.contains(task)) {
-                selectedTasks.remove(task)
-            } else {
-                selectedTasks.add(task)
-            }
-            notifyItemChanged(adapterPosition)
+    fun toggleSelection(task: Task) {
+        if (selectedTasks.contains(task)) {
+            selectedTasks.remove(task)
+        } else {
+            selectedTasks.add(task)
         }
-
+        notifyItemChanged(currentList.indexOf(task))
     }
 
     // Return the selected tasks

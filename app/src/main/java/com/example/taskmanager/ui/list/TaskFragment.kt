@@ -73,7 +73,8 @@ class TaskFragment : Fragment(), OnTaskClickListener {
     override fun onTaskClick(task: Task) {
         if (isSelectionMode) {
             // If selection mode is active, don't navigate, just toggle the selection
-            adapter.getSelectedTasks()
+            adapter.toggleSelection(task)
+//            adapter.getSelectedTasks()
         } else {
             // Navigate to the edit fragment and pass the task as a Bundle
             val editTaskFragment = EditFragment()
