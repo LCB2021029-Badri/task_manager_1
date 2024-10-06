@@ -8,7 +8,7 @@ data class Task(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val title: String,
     val description: String,
-    val dueDate: Long, // Store as timestamp
-    val priority: Int, // 1 - High, 2 - Medium, 3 - Low
+    val dueDate: Long,
+    val priority: Int,
     val isCompleted: Boolean
 )
