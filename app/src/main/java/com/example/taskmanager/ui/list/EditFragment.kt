@@ -1,5 +1,6 @@
 package com.example.taskmanager.ui.list
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.example.taskmanager.R
 import com.example.taskmanager.data.models.Task
 import com.example.taskmanager.viewmodel.TaskViewModel
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -54,7 +56,11 @@ class EditFragment : Fragment() {
 
         // Set onClickListener for Save button
         buttonSave.setOnClickListener {
-            saveTask()
+            updateTask()
+        }
+
+        editTextDueDate.setOnClickListener {
+            showDatePickerDialog(editTextDueDate)
         }
 
         return view
@@ -78,7 +84,7 @@ class EditFragment : Fragment() {
         spinnerPriority.setSelection(priorities.indexOf(priority))
     }
 
-    private fun saveTask() {
+    private fun updateTask() {
         // Update the task object with new values from the input fields
         task.title = editTextTitle.text.toString()
         task.description = editTextDescription.text.toString()
@@ -97,4 +103,22 @@ class EditFragment : Fragment() {
         // Navigate back to the task list
         parentFragmentManager.popBackStack()
     }
+
+    private fun showDatePickerDialog(textView: TextView) {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+            // Format the selected date as dd/MM/yyyy and set it in the TextView
+            val formattedDate = String.format("%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear)
+            textView.text = formattedDate
+        }, year, month, day)
+
+        // Set a minimum date to avoid selecting past dates
+        datePickerDialog.datePicker.minDate = System.currentTimeMillis()
+        datePickerDialog.show()
+    }
+
 }
