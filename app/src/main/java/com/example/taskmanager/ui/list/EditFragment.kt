@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import com.example.taskmanager.R
 import com.example.taskmanager.data.models.Task
@@ -26,7 +27,7 @@ class EditFragment : Fragment() {
     private lateinit var task: Task
     private lateinit var editTextTitle: EditText
     private lateinit var editTextDescription: EditText
-    private lateinit var editTextDueDate: TextView // Assuming date picker is still used here
+    private lateinit var editTextDueDate: TextView
     private lateinit var spinnerPriority: Spinner
     private lateinit var buttonSave: Button
 
@@ -54,14 +55,44 @@ class EditFragment : Fragment() {
         // Initialize ViewModel
         taskViewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
 
+        // Observe selectedDate LiveData from the ViewModel
+        taskViewModel.selectedDate.observe(viewLifecycleOwner) { date ->
+            if (date != null) {
+                // Update the due date TextView with the formatted date
+                val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(date))
+                editTextDueDate.text = formattedDate
+            } else {
+                // If no new date is selected, show the task's stored due date
+                editTextDueDate.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(task.dueDate))
+            }
+        }
+
         // Set onClickListener for Save button
         buttonSave.setOnClickListener {
             updateTask()
+            val taskFragment = TaskFragment()
+            navigateToFragment(taskFragment)
         }
 
+        // Set onClickListener for Due Date TextView
         editTextDueDate.setOnClickListener {
-            showDatePickerDialog(editTextDueDate)
+            showDatePickerDialog()
         }
+
+        // Handle back button press
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(
+            enabled = true
+        ) {
+            override fun handleOnBackPressed() {
+                // Call the function to clear the fields
+                clearFields()
+
+                // Disable the callback and allow the system to handle the back press
+                isEnabled = false
+                requireActivity().onBackPressed()
+            }
+        })
+
 
         return view
     }
@@ -69,6 +100,8 @@ class EditFragment : Fragment() {
     private fun populateFields(task: Task) {
         editTextTitle.setText(task.title)
         editTextDescription.setText(task.description)
+
+        // Display stored due date initially
         editTextDueDate.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(task.dueDate))
 
         // Set priority in the spinner
@@ -88,7 +121,9 @@ class EditFragment : Fragment() {
         // Update the task object with new values from the input fields
         task.title = editTextTitle.text.toString()
         task.description = editTextDescription.text.toString()
-        task.dueDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(editTextDueDate.text.toString())?.time ?: task.dueDate
+
+        // Use the selectedDate from ViewModel if set, otherwise use the task's original due date
+        task.dueDate = taskViewModel.getSelectedDate() ?: task.dueDate
 
         task.priority = when (spinnerPriority.selectedItem.toString()) {
             "High" -> 1
@@ -100,20 +135,22 @@ class EditFragment : Fragment() {
         // Update the task in the ViewModel (and therefore the database)
         taskViewModel.update(task)
 
-        // Navigate back to the task list
-        parentFragmentManager.popBackStack()
+        // Optionally, navigate back or clear the input fields
+        clearFields()
     }
 
-    private fun showDatePickerDialog(textView: TextView) {
+    private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
-            // Format the selected date as dd/MM/yyyy and set it in the TextView
-            val formattedDate = String.format("%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear)
-            textView.text = formattedDate
+            val calendar = Calendar.getInstance()
+            calendar.set(selectedYear, selectedMonth, selectedDay)
+
+            // Save selected date to ViewModel
+            taskViewModel.setSelectedDate(calendar.timeInMillis)
         }, year, month, day)
 
         // Set a minimum date to avoid selecting past dates
@@ -121,4 +158,19 @@ class EditFragment : Fragment() {
         datePickerDialog.show()
     }
 
+    private fun clearFields() {
+        editTextTitle.text.clear()
+        editTextDescription.text.clear()
+        editTextDueDate.text = ""
+        spinnerPriority.setSelection(0)
+        taskViewModel.setSelectedDate(null) // Clear the selected date in ViewModel
+    }
+
+    // Function to handle navigation to AddTaskFragment
+    private fun navigateToFragment(fragment: Fragment) {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
 }
