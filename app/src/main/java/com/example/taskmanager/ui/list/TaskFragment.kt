@@ -91,6 +91,11 @@ class TaskFragment : Fragment(), OnTaskClickListener {
         adapter.toggleSelection(task)
     }
 
+    override fun onTaskCompletionChanged(task: Task) {
+        // Update the task in the database via ViewModel
+        taskViewModel.update(task)
+    }
+
     private fun deleteSelectedTasks() {
         val selectedTasks = adapter.getSelectedTasks()
         selectedTasks.forEach { taskViewModel.delete(it) }

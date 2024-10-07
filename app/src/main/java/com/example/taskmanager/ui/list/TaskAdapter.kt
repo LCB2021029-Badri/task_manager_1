@@ -37,6 +37,9 @@ class TaskAdapter(private val listener: OnTaskClickListener) : ListAdapter<Task,
                 }
             )
 
+            // Set the CheckBox state based on task completion status
+            binding.checkbox.isChecked = task.isCompleted
+
             // Highlight selected item
             binding.root.isSelected = selectedTasks.contains(task)
             binding.root.setBackgroundColor(
@@ -46,6 +49,12 @@ class TaskAdapter(private val listener: OnTaskClickListener) : ListAdapter<Task,
                     binding.root.context.getColor(android.R.color.transparent)
                 }
             )
+
+            // Handle CheckBox change
+            binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
+                task.isCompleted = isChecked // Update the task's completion status
+                listener.onTaskCompletionChanged(task) // Notify the listener to update the database
+            }
 
             // Handle item click
             binding.root.setOnClickListener {
