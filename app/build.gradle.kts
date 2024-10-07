@@ -50,9 +50,13 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.fragment)
-    testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    testImplementation(libs.junit)
+    testImplementation (libs.mockito.core)
+    testImplementation (libs.androidx.core.testing)
+    testImplementation (libs.mockito.inline)
 
 
     implementation(libs.androidx.room.runtime)
@@ -60,4 +64,6 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
+
+
 }
