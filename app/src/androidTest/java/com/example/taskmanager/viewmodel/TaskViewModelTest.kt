@@ -46,6 +46,15 @@ class TaskViewModelTest {
     }
 
     @Test
+    fun setSelectedDate() {
+        val date: Long = System.currentTimeMillis()
+        viewModel.setSelectedDate(date)
+
+        // Assert
+        assertEquals(date, viewModel.getSelectedDate())
+    }
+
+    @Test
     fun insert() = runBlocking {
         val task = Task(title = "Test Task", description = "Description", dueDate = System.currentTimeMillis(), priority = 1, isCompleted = false)
 
@@ -97,12 +106,4 @@ class TaskViewModelTest {
         verify(observer, times(1)).onChanged(anyList()) // Verify that the observer gets called
     }
 
-    @Test
-    fun setSelectedDate() {
-        val date: Long = System.currentTimeMillis()
-        viewModel.setSelectedDate(date)
-
-        // Assert
-        assertEquals(date, viewModel.getSelectedDate())
-    }
 }
