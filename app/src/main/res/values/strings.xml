@@ -2,4 +2,13 @@
     <string name="app_name">Task Manager</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="myString">
+        \n
+        1) Add button - lets you ADD new task.\n
+        2) Tap existing task to EDIT it.\n
+        3) Long press any task to enter selection mode.\n
+        4) Once in selection mode tap tasks to select them\n
+        5) Delete Button - selected tasks can be DELETED\n
+        6) Settings Button - Light or Dark Mode\n
+    </string>
 </resources>
