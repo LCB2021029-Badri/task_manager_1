@@ -79,6 +79,8 @@ dependencies {
 
     testImplementation(libs.kotlinx.coroutines.test.v173)
     androidTestImplementation(libs.kotlinx.coroutines.test.v173)
+    androidTestImplementation (libs.kotlinx.coroutines.test.v160) // or the version you are using
+
 
     testImplementation(libs.androidx.room.testing)
     androidTestImplementation(libs.androidx.room.room.testing)
@@ -86,6 +88,12 @@ dependencies {
     androidTestImplementation(libs.espresso.core.v351)
 
     testImplementation(libs.mockito.kotlin)
+
+    androidTestImplementation (libs.androidx.junit.v113)
+    androidTestImplementation (libs.androidx.espresso.core.v340)
+    androidTestImplementation (libs.androidx.room.testing.v250)
+    androidTestImplementation (libs.androidx.core.testing)
+
 
 
 
