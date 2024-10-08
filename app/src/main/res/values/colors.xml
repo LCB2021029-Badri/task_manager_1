@@ -9,4 +9,5 @@
     <color name="priority_low">#AE8BC34A</color>
 
     <color name="selected_item">#A154C9FD</color>
+    <color name="grey">#A16E6E6E</color>
 </resources>
