@@ -50,20 +50,44 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.junit.ktx)
+    testImplementation(libs.junit.jupiter)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
     testImplementation(libs.junit)
-    testImplementation (libs.mockito.core)
-    testImplementation (libs.androidx.core.testing)
-    testImplementation (libs.mockito.inline)
-
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.androidx.core.testing.v210)
+    testImplementation(libs.kotlinx.coroutines.test)
 
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.kotlin.stdlib)
+
+    androidTestImplementation(libs.androidx.junit.v115)
+    androidTestImplementation(libs.androidx.core)
+    androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.rules)
+
+    testImplementation(libs.mockito.core.v4110)
+    androidTestImplementation(libs.mockito.android)
+
+    testImplementation(libs.kotlinx.coroutines.test.v173)
+    androidTestImplementation(libs.kotlinx.coroutines.test.v173)
+
+    testImplementation(libs.androidx.room.testing)
+    androidTestImplementation(libs.androidx.room.room.testing)
+
+    androidTestImplementation(libs.espresso.core.v351)
+
+    testImplementation(libs.mockito.kotlin)
+
+
 
 
 }

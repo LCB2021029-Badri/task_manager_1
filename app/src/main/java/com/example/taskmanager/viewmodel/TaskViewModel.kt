@@ -11,7 +11,7 @@ import com.example.taskmanager.repository.TaskRepository
 import kotlinx.coroutines.launch
 
 class TaskViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: TaskRepository
+    var repository: TaskRepository
     val allTasks: LiveData<List<Task>>
     val selectedDate = MutableLiveData<Long?>()
 

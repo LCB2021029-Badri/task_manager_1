@@ -18,8 +18,4 @@ class TaskRepository(private val taskDao: TaskDao) {
     suspend fun delete(task: Task) {
         taskDao.deleteTask(task)
     }
-
-    suspend fun getTaskById(taskId: Int): Task? {
-        return taskDao.getTaskById(taskId)
-    }
 }
