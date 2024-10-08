@@ -19,8 +19,9 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.times
 import org.mockito.Mockito.anyList
+import org.mockito.junit.MockitoJUnitRunner
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(MockitoJUnitRunner::class)
 class TaskViewModelTest {
 
     private lateinit var viewModel: TaskViewModel
@@ -32,16 +33,22 @@ class TaskViewModelTest {
 
     @Before
     fun setUp() {
+        // Create an in-memory database for testing
         taskDatabase = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
             TaskDatabase::class.java
         ).build()
+
+        // Initialize the TaskRepository with the DAO
         taskRepository = TaskRepository(taskDatabase.taskDao())
+
+        // Initialize the TaskViewModel with the Application context
         viewModel = TaskViewModel(ApplicationProvider.getApplicationContext())
     }
 
     @After
     fun tearDown() {
+        // Close the database after the tests
         taskDatabase.close()
     }
 
@@ -50,7 +57,7 @@ class TaskViewModelTest {
         val date: Long = System.currentTimeMillis()
         viewModel.setSelectedDate(date)
 
-        // Assert
+        // Assert that the selected date is set correctly
         assertEquals(date, viewModel.getSelectedDate())
     }
 
@@ -65,28 +72,32 @@ class TaskViewModelTest {
         // Act
         viewModel.insert(task)
 
-        // Assert
-        verify(observer, times(1)).onChanged(anyList()) // Verify that the observer gets called
+        // Assert that the observer is notified once
+        verify(observer, times(1)).onChanged(anyList())
     }
 
     @Test
     fun update() = runBlocking {
-        // Insert a task first
+        // Create a task to insert first
         val task = Task(title = "Test Task", description = "Description", dueDate = System.currentTimeMillis(), priority = 1, isCompleted = false)
-        viewModel.insert(task)
 
-        // Update the task
-        val updatedTask = task.copy(title = "Updated Task")
+        // Insert the task into the repository
+        viewModel.insert(task)
 
         // Create a typed observer for LiveData<List<Task>>
         val observer = mock(Observer::class.java) as Observer<List<Task>>
         viewModel.allTasks.observeForever(observer)
 
+        // Prepare the updated task
+        val updatedTask = task.copy(title = "Updated Task")
+
         // Act
         viewModel.update(updatedTask)
 
-        // Assert
-        verify(observer, times(1)).onChanged(anyList()) // Verify that the observer gets called
+        // Assert that the update method was called on the repository
+        verify(taskRepository, times(1)).update(updatedTask)
+        // Verify that the observer gets called
+        verify(observer, times(1)).onChanged(anyList())
     }
 
     @Test
@@ -102,8 +113,7 @@ class TaskViewModelTest {
         // Act
         viewModel.delete(task)
 
-        // Assert
-        verify(observer, times(1)).onChanged(anyList()) // Verify that the observer gets called
+        // Assert that the observer gets called
+        verify(observer, times(1)).onChanged(anyList())
     }
-
 }

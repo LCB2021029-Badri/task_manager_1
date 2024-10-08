@@ -8,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.taskmanager.data.TaskDatabase
 import com.example.taskmanager.data.models.Task
 import com.example.taskmanager.repository.TaskRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TaskViewModel(application: Application) : AndroidViewModel(application) {
     var repository: TaskRepository
@@ -22,15 +24,21 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun insert(task: Task) = viewModelScope.launch {
-        repository.insert(task)
+        withContext(Dispatchers.IO) {
+            repository.insert(task)
+        }
     }
 
     fun update(task: Task) = viewModelScope.launch {
-        repository.update(task)
+        withContext(Dispatchers.IO) {
+            repository.update(task)
+        }
     }
 
     fun delete(task: Task) = viewModelScope.launch {
-        repository.delete(task)
+        withContext(Dispatchers.IO) {
+            repository.delete(task)
+        }
     }
 
     // preserve date in addTask and editTask fragments
