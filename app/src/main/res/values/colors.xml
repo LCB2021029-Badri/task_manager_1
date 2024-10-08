@@ -4,9 +4,9 @@
     <color name="white">#FFFFFFFF</color>
 
 
-    <color name="priority_high">#FF9800</color>
-    <color name="priority_medium">#FFEB3B</color>
-    <color name="priority_low">#8BC34A</color>
+    <color name="priority_high">#ABFF5722</color>
+    <color name="priority_medium">#97FFEB3B</color>
+    <color name="priority_low">#AE8BC34A</color>
 
     <color name="selected_item">#A154C9FD</color>
 </resources>
