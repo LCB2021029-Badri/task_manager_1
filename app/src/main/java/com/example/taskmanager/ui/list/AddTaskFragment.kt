@@ -1,3 +1,5 @@
+package com.example.taskmanager.ui.list
+
 import android.app.DatePickerDialog
 import android.widget.TextView
 import android.os.Bundle
@@ -13,7 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.taskmanager.R
 import com.example.taskmanager.data.models.Task
-import com.example.taskmanager.ui.list.TaskFragment
 import com.example.taskmanager.viewmodel.TaskViewModel
 import java.text.SimpleDateFormat
 import java.util.*

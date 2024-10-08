@@ -42,13 +42,11 @@ class TaskAdapter(private val listener: OnTaskClickListener) : ListAdapter<Task,
 
             // Highlight selected item
             binding.root.isSelected = selectedTasks.contains(task)
-            binding.root.setBackgroundColor(
-                if (selectedTasks.contains(task)) {
-                    binding.root.context.getColor(R.color.selected_item)
-                } else {
-                    binding.root.context.getColor(android.R.color.transparent)
-                }
-            )
+            if (selectedTasks.contains(task)) {
+                binding.root.setBackgroundColor(binding.root.context.getColor(R.color.selected_item))
+            } else {
+//                binding.root.setBackgroundColor(binding.root.context.getColor(android.R.color.transparent))
+            }
 
             // Handle CheckBox change
             binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
