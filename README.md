@@ -4,12 +4,10 @@
 
 The Task Manager App is a simple and intuitive Android application developed using Kotlin and XML, designed to help users efficiently manage their tasks. Users can create, update, and delete tasks, assign priorities, set due dates, and mark tasks as completed. Additionally, the app offers date preservation, ensuring that users can track tasks according to their selected dates. The app is built with the MVVM (Model-View-ViewModel) architecture and utilizes Room for local storage, making it easy to manage tasks and ensure smooth performance.
 
-## Download APK
-
 
 ## How to Use the App
 
-1. **Download the App**: [Download APK](#)
+1. **Download the App**: [click here](https://github.com/LCB2021029-Badri/task_manager_1/blob/main/APK/taskManager.apk)
 2. **Add Task**: Use the Add button to create a new task.
 3. **Edit Task**: Tap on any existing task to edit it.
 4. **Select a Single Task**: Long press on any task to highlight it.
@@ -20,10 +18,19 @@ The Task Manager App is a simple and intuitive Android application developed usi
 9. **Priority Levels**: Priority levels are color-coded as red for high, yellow for medium, and green for low.
 
 ## Demo Video
-[**click here**](#)
+https://github.com/user-attachments/assets/e906d448-bdef-4296-9f19-2ca656eef62f
 
 ### App Screenshots
-
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/bc300e9d-89b0-4eb1-89e5-190b5cd9ef2b" width="200" />
+  <img src="https://github.com/user-attachments/assets/47070456-a975-4ada-b4ee-b18a2d2072c8" width="200" />
+  <img src="https://github.com/user-attachments/assets/5d522e7b-6f07-4f97-a5e0-00f8701cd0c9" width="200" />
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9b15e413-4fde-4f50-91a8-58d2a77fe45c" width="200" />
+  <img src="https://github.com/user-attachments/assets/7d96ef5d-43e1-433c-8c28-43d160c48ba0" width="200" />
+  <img src="https://github.com/user-attachments/assets/91b8abea-7178-441f-afba-5b0d97248b3d" width="200" />
+</p>
 
 ## Key Features
 
