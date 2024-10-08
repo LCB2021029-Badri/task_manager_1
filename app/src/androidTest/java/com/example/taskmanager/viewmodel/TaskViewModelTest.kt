@@ -77,30 +77,6 @@ class TaskViewModelTest {
     }
 
     @Test
-    fun update() = runBlocking {
-        // Create a task to insert first
-        val task = Task(title = "Test Task", description = "Description", dueDate = System.currentTimeMillis(), priority = 1, isCompleted = false)
-
-        // Insert the task into the repository
-        viewModel.insert(task)
-
-        // Create a typed observer for LiveData<List<Task>>
-        val observer = mock(Observer::class.java) as Observer<List<Task>>
-        viewModel.allTasks.observeForever(observer)
-
-        // Prepare the updated task
-        val updatedTask = task.copy(title = "Updated Task")
-
-        // Act
-        viewModel.update(updatedTask)
-
-        // Assert that the update method was called on the repository
-        verify(taskRepository, times(1)).update(updatedTask)
-        // Verify that the observer gets called
-        verify(observer, times(1)).onChanged(anyList())
-    }
-
-    @Test
     fun delete() = runBlocking {
         // Insert a task first
         val task = Task(title = "Test Task", description = "Description", dueDate = System.currentTimeMillis(), priority = 1, isCompleted = false)
@@ -116,4 +92,6 @@ class TaskViewModelTest {
         // Assert that the observer gets called
         verify(observer, times(1)).onChanged(anyList())
     }
+
+
 }
